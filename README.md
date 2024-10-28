@@ -62,17 +62,7 @@ Follow these instructions to get a copy of the project up and running on your lo
     ```bash
     npm run start
     
-## Authors
 
-| Name                       | Role       |
-|----------------------------|------------|
-| Nico de Castro             | Fullstack  |
-| Mark Neil Autriz           | Fullstack  |
-| Keshia Lei Gayoso          | Fullstack  |
-| Maximus Aurellus Bicalan   | Fullstack  |
-
-## License
- This project is under the CREATIVE COMMONS ATTRIBUTION-NONCOMMERCIAL-NODERIVS 4.0 INTERNATIONAL (CC BY-NC-ND 4.0) license. To view a copy of this license, visit https://creativecommons.org/licenses/by-nc-nd/4.0/.
 
  ### Project Screenshots
 - Login Page
