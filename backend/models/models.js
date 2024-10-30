@@ -45,7 +45,7 @@ const connectAndDefineModels = async () => {
   // Product model
   const Product = mongoose.model('Product', {
     product_id: {
-      type: Number,
+      type: String,
       required: true,
       unique: true
     },
@@ -108,7 +108,8 @@ const connectAndDefineModels = async () => {
 
   const cartItemSchema = mongoose.Schema({
     product_id: {
-      type: String,
+      type: Number,
+      required: true
     },
     product_info: {
       name: {

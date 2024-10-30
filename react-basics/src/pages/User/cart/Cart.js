@@ -189,18 +189,18 @@ const Cart = () => {
                         <h3>Your cart is empty!</h3>
                     ) : (
                         cartList.map((item) => {
-                            if (!item.product_id) {
+                            if (!item._id) {
                                 console.warn("Product ID is undefined or invalid for item:", item);
                                 return null; // Skip rendering this item if the ID is invalid
                             }
                             return (
-                                <div className="cart-card" id={item.product_id} key={item.product_id}>
+                                <div className="cart-card" id={item._id} key={item._id}>
                                     <img src={item.image} alt={item.name} />
                                     <div className="cart-item-name">{item.name}</div>
-                                    <button onClick={() => removeFromCart(item.product_id, 'false')} className='remove-from-cart'>-</button>
+                                    <button onClick={() => removeFromCart(item._id, 'false')} className='remove-from-cart'>-</button>
                                     <div>QTY: {item.cart_qty}</div>
-                                    <button onClick={() => addToCart(item.product_id)} className='remove-from-cart'>+</button>
-                                    <button onClick={() => removeFromCart(item.product_id, 'true')} className="remove-from-cart end">X</button>
+                                    <button onClick={() => addToCart(item._id)} className='remove-from-cart'>+</button>
+                                    <button onClick={() => removeFromCart(item._id, 'true')} className="remove-from-cart end">X</button>
                                 </div>
                             );
                         })

@@ -39,7 +39,7 @@ const OrderList = (props)=> {
         <tr>
             <td>{index}</td>
             <td>{data.transaction_id}</td>
-            <td>{data.ordered_products.product_name} (ID: {data.ordered_products.product_id})</td>
+            <td>{data.ordered_products.product_name} (ID: {data.ordered_products._id})</td>
             <td>{data.ordered_products.order_qty}</td>
             <td className={status(data.ordered_products.order_status)}>{status(data.ordered_products.order_status)}</td>
             <td>{formatDateToManila(data.order_date)}</td>

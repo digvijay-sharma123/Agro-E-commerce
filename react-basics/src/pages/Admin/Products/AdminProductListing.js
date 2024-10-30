@@ -38,21 +38,24 @@ export default function AdminProductListing() {
     const handleSelectAll = (e) => {
         const checked = e.target.checked;
         setIsCheckAll(checked);
-        setToDelete(checked ? productList.map(li => li.product_id) : []);
+        setToDelete(checked ? productList.map(item => item.product_id) : []);
     };
 
     const handleClick = (e, productId) => {
         const checked = e.target.checked;
-        setToDelete(checked ? [...toDelete, Number(productId)] : toDelete.filter(item => item !== Number(productId)));
+        setToDelete(
+            checked ? [...toDelete, productId] : toDelete.filter(item => item !== productId)
+        );
     };
 
     const deleteProduct = async (prodId) => {
-        await axios.delete(`http://localhost:3001/products/${prodId}`)
+            await axios.delete(`http://localhost:3001/products/${prodId}`)
             .then(() => {
                 setProductList(productList.filter(item => item.product_id !== prodId));
             })
             .catch(error => console.log('Error deleting product:', error));
     };
+    
 
     const handleDeleteClick = () => {
         toDelete.forEach(id => deleteProduct(id));
@@ -63,7 +66,7 @@ export default function AdminProductListing() {
         <>
             <div className='admin-product-page'>
                 <div className="admin-product-header">
-                    <h1>My Products</h1>
+                    <h1>My Product</h1>
                 </div>
 
                 <div className='admin-product-box'>
@@ -84,13 +87,7 @@ export default function AdminProductListing() {
                             <thead>
                                 <tr>
                                     <th>
-                                        <input
-                                            className="select-all"
-                                            type="checkbox"
-                                            name="select"
-                                            onChange={handleSelectAll}
-                                            checked={isCheckAll}
-                                        /> Product(s)
+                                        Product(s)
                                     </th>
                                     <th>Price</th>
                                     <th>Stock</th>
@@ -121,7 +118,7 @@ export default function AdminProductListing() {
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>{"₱" + (item.price ? item.price.toFixed(2) : "0.00")}</td>
+                                        <td>{(item.price ? item.price.toFixed(2) : "0.00")}</td>
                                         <td>{item.qty}</td>
                                         <td>
                                             <button

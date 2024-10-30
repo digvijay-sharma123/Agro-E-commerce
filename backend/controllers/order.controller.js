@@ -1,5 +1,5 @@
 import { models } from '../models/models.js';
-const { User, typeOfUser, Cart, product_id, Product } = models;
+const { User, typeOfUser, Cart, Product } = models;
 const { Transaction } = models;
 
 // POST /orders
@@ -24,7 +24,7 @@ export const createOrder = async (req, res) => {
         }));
 
         for (let cartItem of cartItems) {
-            const product = await Product.findOne({ product_id: Number(cartItem.product_id) });
+            const product = await Product.findOne({ product_id: cartItem.product_id });
             if (!product) {
                 return res.status(404).json({ message: `${cartItem.product_info.name} does not exist, please remove before checkout.` });
             }
@@ -49,7 +49,7 @@ export const createOrder = async (req, res) => {
         const transactions = cartItems.map(item => ({
             transaction_id: `tx-${Date.now()}-${Math.floor(Math.random() * 10000)}`,
             ordered_products: {
-                product_id: Number(item.product_id),
+                product_id: item.product_id,
                 product_name: item.product_info.name,
                 order_qty: item.product_info.cart_qty,
                 order_status: 0,
@@ -78,13 +78,13 @@ export const createOrder = async (req, res) => {
 export const getOrders = async (req, res) => {
     try {
         const userEmail = decodeURIComponent(req.query.email);
-        console.log('User Email:', userEmail); // Log the user email
+        console.log('User Email:', userEmail);
 
         const transactions = await Transaction.find({ email: userEmail }).sort({ "ordered_products.order_status": 1, "order_date": -1 });
         
         res.status(200).json({ message: 'Orders retrieved successfully', transactions });
     } catch (error) {
-        console.error('Error retrieving orders:', error); // More specific error log
+        console.error('Error retrieving orders:', error);
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
@@ -92,8 +92,8 @@ export const getOrders = async (req, res) => {
 
 export const getTotalOrders = async (req, res) => {
     try {
-        const transactions = await Transaction.find(); //
-        const totalOrders = transactions.length
+        const transactions = await Transaction.find();
+        const totalOrders = transactions.length;
         res.status(200).json({ message: 'Total orders retrieved successfully', totalOrders });
     } catch (error) {
         console.error(error);
@@ -139,15 +139,13 @@ export const cancelOrder = async (req, res) => {
     try {
         const transactId = decodeURIComponent(req.query.transactId);
 
-        //check if order is canceled or confirmed
-        const checkOrder = await Transaction.findOne({ transaction_id : transactId });
+        const checkOrder = await Transaction.findOne({ transaction_id: transactId });
         if (checkOrder.ordered_products.order_status === 2) {
             return res.status(400).json({ message: 'Order is already canceled.' });
         }
 
-        // update order status to canceled
         const order = await Transaction.findOneAndUpdate(
-            {transaction_id : transactId},
+            { transaction_id: transactId },
             { 
                 $set: 
                 {
@@ -162,11 +160,10 @@ export const cancelOrder = async (req, res) => {
         }
 
         const product = await Product.findOneAndUpdate(
-            { product_id: Number(order.ordered_products.product_id) },
+            { product_id: order.ordered_products.product_id },
             { $inc: { qty: order.ordered_products.order_qty } }
         );
         
-
         res.status(200).json({ message: 'Order canceled successfully', order });
     } catch (error) {
         console.error(error);
@@ -179,14 +176,13 @@ export const confirmOrder = async (req, res) => {
     try {
         const transactId = decodeURIComponent(req.query.transactId);
 
-        //check if order is already confirmed or canceled
-        const checkOrder = await Transaction.findOne({ transaction_id : transactId });
-        if (checkOrder.order_status === 2 || checkOrder.order_status === 1) {
+        const checkOrder = await Transaction.findOne({ transaction_id: transactId });
+        if (checkOrder.ordered_products.order_status === 2 || checkOrder.ordered_products.order_status === 1) {
             return res.status(400).json({ message: 'Order is already completed or canceled.' });
         }
 
         const order = await Transaction.findOneAndUpdate(
-            {transaction_id : transactId},
+            { transaction_id: transactId },
             { 
                 $set: 
                 {

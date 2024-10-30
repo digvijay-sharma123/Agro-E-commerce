@@ -65,7 +65,7 @@ const AdminOrderListing = () => {
             <div className="order-details">
               <p className="order-info">Transaction ID: {order.transaction_id}</p>
               <p className="order-info">Customer Email: {order.email}</p>
-              <p className="order-info">{order.ordered_products.product_name} (Product ID: {Number(order.ordered_products.product_id)})</p> {/* Convert to number */}
+              <p className="order-info">{order.ordered_products.product_name} (Product ID: {Number(order.ordered_products._id)})</p> {/* Convert to number */}
               <p className="order-info">Quantity: {order.ordered_products.order_qty}</p>
               <p className="order-info">Price: {'₱' + order.ordered_products.sum_total.toFixed(2)}</p>
               <p className="order-info">Date and Time Ordered: {formatDate(order.order_date)}</p>

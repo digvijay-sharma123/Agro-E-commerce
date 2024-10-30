@@ -62,7 +62,7 @@ export default function router(app) {
 
   // cart routes
   app.get("/cart", getCart);
-  app.post("/cart", addToCart); // Change this to POST
+  app.post("/cart", addToCart);
   app.delete("/cart/:itemId", deleteCartItem);
   app.delete("/clearcart", clearCart);
 

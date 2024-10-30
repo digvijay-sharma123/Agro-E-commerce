@@ -124,25 +124,33 @@ function aggregateSales(transactions, periods, periodType) {
             if (!sales[key]) {
                 sales[key] = 0;
             }
-            const sumTotal = parseFloat(transaction.ordered_products.reduce((acc, product) => acc + (parseFloat(product.sum_total) || 0), 0));
+
+            // Check if ordered_products is an array before using reduce
+            const sumTotal = Array.isArray(transaction.ordered_products)
+                ? transaction.ordered_products.reduce((acc, product) => acc + (parseFloat(product.sum_total) || 0), 0)
+                : 0;
+
             sales[key] += sumTotal;
         });
     } else { // for month and week periods
         periods.forEach(period => {
-            sales[period.start] = 0; // initialize to zero all periods
+            sales[period.start] = 0; // initialize to zero for all periods
 
             transactions.forEach(transaction => {
                 const date = new Date(transaction.order_date);
                 const formattedDate = format(date, 'yyyy-MM-dd');
 
-                const sumTotal = parseFloat(transaction.ordered_products.reduce((acc, product) => acc + (parseFloat(product.sum_total) || 0), 0));
+                // Calculate sumTotal if ordered_products is an array
+                const sumTotal = Array.isArray(transaction.ordered_products)
+                    ? transaction.ordered_products.reduce((acc, product) => acc + (parseFloat(product.sum_total) || 0), 0)
+                    : 0;
 
                 if (formattedDate >= period.start && formattedDate < period.end) { // if transaction is within the period
                     sales[period.start] += sumTotal;
                 }
             });
 
-            // if no sales for the period, set to 0
+            // Set to 0 if no sales for the period
             if (sales[period.start] === 0) {
                 sales[period.start] = 0;
             }
@@ -151,3 +159,4 @@ function aggregateSales(transactions, periods, periodType) {
 
     return sales;
 }
+
