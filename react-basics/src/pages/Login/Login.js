@@ -10,18 +10,14 @@ export default function Login() {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [userType, setUserType] = useState('user'); // Default to user
 
     const isAuthenticated = !!localStorage.getItem('token');
-
-    useEffect(() => {
-        // If you need to fetch users for some reason, handle it here
-        // fetchUsers();
-    }, []);
 
     const handleLogin = async (event) => {
         event.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3001/login', { email, password });
+            const response = await axios.post('http://localhost:3001/login', { email, password, user_type: userType });
             const token = response.data.token;
             console.log(jwtDecode(token)); // Decoding the token for verification
 
@@ -47,6 +43,13 @@ export default function Login() {
                         <form onSubmit={handleLogin}>
                             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="email-input" placeholder='Email' required />
                             <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="password-input" placeholder='Password' required />
+                            
+                            {/* Add a dropdown to select user type */}
+                            <select value={userType} onChange={(e) => setUserType(e.target.value)} className="user-type-input" required>
+                                <option value="user">User</option>
+                                <option value="admin">Admin</option>
+                            </select>
+
                             <button type="submit" className='login-button'>Login</button>
                         </form>
                         <p>New here? <Link to={`/signup`} >Sign Up</Link></p>

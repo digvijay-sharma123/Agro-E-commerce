@@ -3,7 +3,8 @@ const { User, typeOfUser } = models;
 
 export const getTotalUsers = async (req, res) => {
     try {
-        const users = await User.find({ user_type: typeOfUser.USER }); //
+        // Count users based on user_type
+        const users = await User.find({ user_type: typeOfUser.USER });
         const totalUsers = users.length;
         res.status(200).json({ message: 'Total users retrieved successfully', totalUsers });
     } catch (error) {
@@ -13,7 +14,8 @@ export const getTotalUsers = async (req, res) => {
 
 export const getUsers = async (req, res) => {
     try {
-        const users = await User.find({ user_type: typeOfUser.USER }); //
+        // Fetch users based on user_type
+        const users = await User.find({ user_type: typeOfUser.USER });
         res.status(200).send({ message: 'Users retrieved successfully', users, totalUsers: users.length });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error });
@@ -23,8 +25,14 @@ export const getUsers = async (req, res) => {
 export const getUser = async (req, res) => {
     try {
         const email = req.query.email;
-        const user = await User.find({ email: email });
-        res.status(200).send({ message: 'Users retrieved successfully', user });
+        // Fetch user based on email and user_type (optional)
+        const user = await User.findOne({ email: email });
+        
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        
+        res.status(200).send({ message: 'User retrieved successfully', user });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error });
     }
@@ -32,16 +40,25 @@ export const getUser = async (req, res) => {
 
 export const updateUser = async (req, res) => {
     try {
-        const { first_name, middle_name, last_name, email } = req.body;
-        await User.findOneAndUpdate({ email: email }, 
+        const { first_name, middle_name, last_name, email, user_type } = req.body; // Include user_type if needed
+        // Update user info based on email
+        const updatedUser = await User.findOneAndUpdate(
+            { email: email },
             {
                 first_name: first_name,
                 middle_name: middle_name,
                 last_name: last_name,
-            }
+                user_type: user_type // Allow updating the user_type if necessary
+            },
+            { new: true } // Return the updated document
         );
-        res.status(200).send({ message: 'Personal information updated successfully!' });
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        res.status(200).send({ message: 'User information updated successfully!', updatedUser });
     } catch (error) {
-        res.status(500).json({ message: 'Server error', error});
+        res.status(500).json({ message: 'Server error', error });
     }
 }

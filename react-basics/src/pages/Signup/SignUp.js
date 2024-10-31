@@ -12,6 +12,7 @@ export default function SignUp() {
     const [middle_name, setMiddleName] = useState('');
     const [last_name, setLastName] = useState('');
     const [password, setPassword] = useState('');
+    const [userType, setUserType] = useState('user'); // Default to user role
 
     const [key, setKey] = useState(0);
     const [requestMessage, setRequestMessage] = useState('');
@@ -40,7 +41,8 @@ export default function SignUp() {
                 password,
                 first_name,
                 middle_name,
-                last_name
+                last_name,
+                role: userType // Include the user type in the request
             })
             .then(() => {
                 alert('Registration Successful');
@@ -102,6 +104,29 @@ export default function SignUp() {
                             placeholder='Last name'
                             required
                         />
+
+                        {/* User Type Selection */}
+                        <div className="user-type-selection">
+                            <label>
+                                <input 
+                                    type="radio" 
+                                    value="user" 
+                                    checked={userType === 'user'} 
+                                    onChange={() => setUserType('user')} 
+                                />
+                                User
+                            </label>
+                            <label>
+                                <input 
+                                    type="radio" 
+                                    value="admin" 
+                                    checked={userType === 'admin'} 
+                                    onChange={() => setUserType('admin')} 
+                                />
+                                Admin
+                            </label>
+                        </div>
+
                         <button
                             type="submit"
                             className='login-button'>Submit</button>

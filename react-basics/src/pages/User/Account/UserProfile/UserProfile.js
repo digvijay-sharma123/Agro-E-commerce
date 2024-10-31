@@ -11,7 +11,11 @@ const UserProfile = () => {
   const [user, setUser] = useState({});
   const [purchasedProducts, setPurchasedProducts] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({
+    first_name: '',
+    middle_name: '',
+    last_name: ''
+  });
 
   // for popup
   const [key, setKey] = useState(0)
@@ -25,23 +29,22 @@ const UserProfile = () => {
     fetchOrdersByUser();
 }, []);
 
-  const fetchUser = async () => {
-    await axios.get(`http://localhost:3001/user?email=${encodeURIComponent(userEmail)}`)
-      .then((res) => {
-        // console.log(res.data)
-        setUser(res.data.user[0])
-        setFormData(res.data.user[0])
-      })
-      .catch((error) => {
-        if (error.response) {
-            console.log(error.response.data)
-            console.log(error.response.status)
-            console.log(error.response.headers)
-        } else if (error.request) {
-            console.log(error.request)
-        }
+const fetchUser = async () => {
+  await axios.get(`http://localhost:3001/user?email=${encodeURIComponent(userEmail)}`)
+    .then((res) => {
+      setUser(res.data.user);  // Use `res.data.user` directly
+      setFormData(res.data.user);
     })
-  }
+    .catch((error) => {
+      if (error.response) {
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      } else if (error.request) {
+        console.log(error.request);
+      }
+    });
+};
 
   const fetchOrdersByUser = async () => {
     await axios.get(`http://localhost:3001/orders?email=${encodeURIComponent(userEmail)}`)
@@ -66,9 +69,15 @@ const UserProfile = () => {
   }
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    if (e.target && e.target.name) {
+      const { name, value } = e.target;
+      setFormData((prevData) => ({ ...prevData, [name]: value }));
+    } else {
+      console.error('handleChange: Event target or name is undefined');
+    }
   };
+  
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -115,9 +124,9 @@ const UserProfile = () => {
         <form onSubmit={handleSubmit}>
           <label>
             Edit Name:
-            <input type="text" name="first_name" placeholder='First Name' value={formData.first_name} onChange={handleChange} required/>
-            <input type="text" name="middle_name" placeholder='Middle Name' value={formData.middle_name} onChange={handleChange} />
-            <input type="text" name="last_name" placeholder='Last Name' value={formData.last_name} onChange={handleChange} required/>
+            <input type="text" name="first_name" placeholder='First Name' value={formData.first_name || ''} onChange={handleChange} required />
+            <input type="text" name="middle_name" placeholder='middle Name' value={formData.middle_name || ''} onChange={handleChange} required />
+            <input type="text" name="last_name" placeholder='last Name' value={formData.last_name || ''} onChange={handleChange} required />
           </label>
           {/* <label>
             Email:

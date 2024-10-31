@@ -55,6 +55,7 @@ export default function router(app) {
   app.post("/login", loginUser);
 
   app.get("/user", getUser);
+  app.put('/update-role', updateUserRole);
   app.post("/user", updateUser);
   app.post("/user/update-role", updateUserRole);
   app.get("/users", getUsers);

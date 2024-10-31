@@ -84,3 +84,11 @@
     padding: 8px;
     height: 140px;
 }
+
+.user-type-selection {
+    margin: 10px 0;
+}
+
+.user-type-selection label {
+    margin-right: 15px;
+}

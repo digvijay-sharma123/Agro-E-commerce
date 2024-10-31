@@ -41,6 +41,7 @@ const connectAndDefineModels = async () => {
     },
     password: String
   });
+  
 
   // Product model
   const Product = mongoose.model('Product', {
