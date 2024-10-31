@@ -68,6 +68,7 @@ Follow these instructions to get a copy of the project up and running on your lo
 - Login Page
 
     ![Login Page](react-basics/src/Images/login-ss.jpg)
+)
 - Signup Page
     ![Signup Page](react-basics/src/Images/signup-ss.jpg)
 - Home Page
