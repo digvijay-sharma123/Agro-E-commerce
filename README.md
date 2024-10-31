@@ -67,7 +67,8 @@ Follow these instructions to get a copy of the project up and running on your lo
  ### Project Screenshots
 - Login Page
 
-    ![Login Page](react-basics/src/Images/login-ss.jpg)
+    ![Login Page](![image](https://github.com/user-attachments/assets/e134f9ac-2c53-418c-a0ea-00523f0c4897)
+)
 - Signup Page
     ![Signup Page](react-basics/src/Images/signup-ss.jpg)
 - Home Page
